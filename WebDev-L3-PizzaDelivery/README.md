@@ -2,98 +2,66 @@
 
 A full-stack pizza delivery web application developed as part of the **Oasis Infobyte Web Development Internship — Level 3, Task 1**.
 
-Oasis Pizza allows customers to browse pizzas, customize their orders, place orders, complete a test payment flow, and track order status. It also provides an admin dashboard for managing pizzas, customer orders, and inventory.
+Oasis Pizza allows customers to browse pizzas, customize their orders, add items to their cart, place orders, and track order status. It also provides an admin dashboard for managing pizzas, customer orders, and inventory.
 
 ## ✨ Features
 
-### 🔐 Authentication & User Management
+### 👤 Customer Features
 - User registration and login.
-- Secure password hashing using bcryptjs.
-- JWT-based authentication.
 - Email verification.
 - Forgot password and password reset.
-- User profile management.
-- Role-based access control for admin operations.
-
-### 🍕 Pizza Menu & Customization
 - Browse available pizzas.
-- View pizza details, prices, and categories.
-- Select pizza sizes.
-- Customize pizzas with:
-  - 5 Pizza Base options.
-  - 5 Sauce options.
-  - 5 Cheese options.
-  - Multiple vegetable selections.
+- Customize pizzas with different:
+  - Pizza bases.
+  - Sauces.
+  - Cheese types.
+  - Multiple vegetables.
 - Add customized pizzas to the shopping cart.
-
-### 🛒 Cart & Order Management
-- Add and remove items from the cart.
-- Manage cart quantities.
-- Review order details and pricing.
-- Place customer orders.
-- View personal order history.
-- Track order status with automatic updates.
-
-### 💳 Payment
-- Mock payment flow for testing checkout.
-- Inventory is deducted after successful payment.
-- Failed payments do not deduct inventory.
-
-> **Note:** The current application uses a mock payment implementation. It does not process real payments through Razorpay or another payment gateway.
-
-### 📦 Inventory Management
-- View inventory items and quantities.
-- Add new inventory items.
-- Update stock quantities manually.
-- Validate ingredient availability.
-- Automatically deduct ingredient stock after successful payment.
-- Scheduled low-stock monitoring.
-
-### 📧 Email Notifications
-- Email verification.
-- Password reset emails.
-- Low-stock alerts for administrators.
-- Order status update emails.
-- Nodemailer with Ethereal Email for testing.
-
-> **Note:** Ethereal Email is used as a testing service. Emails are available through preview links in the backend terminal and are not delivered to real customer inboxes.
+- Place orders and view order summaries.
+- View order history and track order status.
 
 ### 🛠️ Admin Dashboard
-- Create, update, and delete pizzas.
-- View customer orders.
+- Admin authentication and access control.
+- Add, edit, and delete pizzas.
+- Manage customer orders.
 - Update order statuses.
-- Manage inventory items and quantities.
-- Monitor low-stock alerts.
+- View and manage inventory.
+- Add new inventory ingredients.
+- Update ingredient quantities.
+- Automatic inventory deduction after successful payment.
+- Automated low-stock email alerts.
+
+### 💳 Payment
+- Mock payment flow for testing the order process.
+- Inventory is deducted only after a successful mock payment.
+
+> **Note:** The current implementation uses a mock payment system. It does not process real payments or integrate with Razorpay.
 
 ## 🧰 Tech Stack
 
-### Frontend
-- React 19
-- Vite 8
-- React Router 7
-- Axios
+**Frontend**
+- React.js
+- Vite
 - CSS
 
-### Backend
+**Backend**
 - Node.js
-- Express 5
+- Express.js
 - MongoDB
 - Mongoose
-- JWT
-- bcryptjs
+- JWT Authentication
+- bcrypt
+
+**Additional Tools**
 - Nodemailer
-- node-cron
+- Ethereal Email for testing email delivery
+- node-cron for scheduled inventory checks
+- Git and GitHub
 
 ## 📁 Project Structure
 
 ```text
-Pizza Delivery Project - OasisInfobyte/
-│
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   ├── package.json
-│   └── package-lock.json
+WebDev-L3-PizzaDelivery/
 │
 ├── backend/
 │   ├── src/
@@ -104,12 +72,24 @@ Pizza Delivery Project - OasisInfobyte/
 │   │   ├── routes/
 │   │   ├── scripts/
 │   │   ├── services/
-│   │   │   └── payments/
 │   │   ├── utils/
 │   │   └── server.js
 │   ├── .env.example
-│   ├── package.json
-│   └── package-lock.json
+│   ├── .gitignore
+│   └── package.json
+│
+├── frontend/
+│   ├── public/
+│   │   └── images/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── .gitignore
+│   ├── index.html
+│   └── package.json
 │
 └── README.md
 ```
@@ -117,15 +97,15 @@ Pizza Delivery Project - OasisInfobyte/
 ## ⚙️ Installation & Setup
 
 ### Prerequisites
-- Node.js and npm.
-- MongoDB Atlas account or a MongoDB database.
-- Git.
+- Node.js
+- npm
+- MongoDB Atlas account or a local MongoDB instance
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd <YOUR_PROJECT_FOLDER>
+git clone https://github.com/youssef-hassan1/OIBSIP.git
+cd OIBSIP/WebDev-L3-PizzaDelivery
 ```
 
 ### 2. Backend Setup
@@ -135,24 +115,13 @@ cd backend
 npm install
 ```
 
-Create a `.env` file inside the `backend` directory:
+Create a `.env` file based on `.env.example` and configure the required environment variables.
 
-```env
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_secure_jwt_secret
-API_URL=http://localhost:3000
-ADMIN_EMAIL=your_admin_email
-```
-
-Start the backend:
+Start the backend server:
 
 ```bash
 node src/server.js
 ```
-
-The backend API runs at:
-
-`http://localhost:3000`
 
 ### 3. Frontend Setup
 
@@ -164,55 +133,46 @@ npm install
 npm run dev
 ```
 
-The frontend runs at:
+Open the local URL displayed by Vite in your browser.
 
-`http://localhost:5173`
+### 4. Environment Variables
 
-## 🔗 API Routes
+Configure the following variables in `backend/.env`:
 
-| Endpoint | Description |
-|---|---|
-| `/api/auth` | Authentication and user management |
-| `/api/pizzas` | Pizza listing and management |
-| `/api/orders` | Order creation and management |
-| `/api/inventory` | Inventory management |
-| `/api/payments` | Mock payment processing |
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_secure_jwt_secret
+API_URL=http://localhost:3000
+ADMIN_EMAIL=your_admin_email
+```
 
-## 📦 Automated Inventory Monitoring
+## 🔐 Environment Variables
 
-The backend uses `node-cron` to run scheduled inventory checks every 5 minutes.
+For security reasons, environment files containing secrets and credentials are not included in this repository.
 
-When an inventory item reaches its low-stock threshold, the application can send an alert email to the configured administrator email address.
+Use the provided `.env.example` files as configuration references.
 
-Inventory deduction takes place after successful payment.
+## 📦 Inventory Management
 
-## 🧪 Tested Functionality
+The application includes an inventory management system that:
+- Tracks available ingredients.
+- Supports manual stock updates.
+- Deducts ingredient quantities after successful payments.
+- Checks for low-stock items automatically.
+- Sends low-stock email alerts using a scheduled background job.
 
-- User registration and login.
-- Email verification and password reset flows.
-- Pizza browsing and customization.
-- Cart operations and order creation.
-- Successful and failed mock payments.
-- Automatic inventory deduction.
-- Manual inventory updates.
-- Low-stock email alerts.
-- Admin pizza and order management.
-- Order status updates and tracking.
+## 📸 Screenshots
 
-## 👨‍💻 Internship Details
+Screenshots of the application will be added here.
 
-- **Organization:** Oasis Infobyte
-- **Track:** Web Development
-- **Level:** Level 3
-- **Task:** Task 1 — Pizza Delivery Full-Stack Application
+## 👨‍💻 Developer
 
-## 🚀 Future Improvements
+**Youssef Hassan**
 
-- Integrate a real payment gateway.
-- Deploy the application to a production environment.
-- Configure a production email provider.
-- Implement WebSocket-based real-time order updates.
+Full-Stack Web Developer
+
+Developed as part of the Oasis Infobyte Web Development Internship.
 
 ## 📄 License
 
-Developed for educational and internship purposes as part of the Oasis Infobyte Web Development Internship.
+This project was developed for educational and internship purposes.
