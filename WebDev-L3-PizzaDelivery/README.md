@@ -146,11 +146,14 @@ API_URL=http://localhost:3000
 ADMIN_EMAIL=your_admin_email
 ```
 
-## 🔐 Environment Variables
+# Backend: backend/.env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_secure_jwt_secret
+API_URL=http://localhost:3000
+ADMIN_EMAIL=your_admin_email
 
-For security reasons, environment files containing secrets and credentials are not included in this repository.
-
-Use the provided `.env.example` files as configuration references.
+# Frontend: frontend/.env
+VITE_API_URL=http://localhost:3000
 
 ## 📦 Inventory Management
 

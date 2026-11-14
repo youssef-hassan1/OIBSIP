@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
+const API_URL = import.meta.env.VITE_API_URL || "";
+axios.defaults.baseURL = API_URL;
+
 function App() {
   const [pizzas, setPizzas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -105,7 +108,7 @@ function App() {
     const fetchPizzas = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/pizzas"
+          "/api/pizzas"
         );
 
         const data = response.data.pizzas || response.data.data || [];
@@ -126,7 +129,7 @@ function App() {
     const fetchIngredients = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/inventory/available-ingredients"
+          "/api/inventory/available-ingredients"
         );
 
         setIngredients(response.data.ingredients || []);
@@ -153,7 +156,7 @@ function App() {
       setOrdersError("");
 
       const response = await axios.get(
-        "http://localhost:3000/api/orders/my-orders",
+        "/api/orders/my-orders",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -179,7 +182,7 @@ function App() {
       setAdminError("");
 
       const response = await axios.get(
-        "http://localhost:3000/api/orders",
+        "/api/orders",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -204,7 +207,7 @@ function App() {
       setAdminError("");
 
       await axios.patch(
-        `http://localhost:3000/api/orders/${orderId}/status`,
+        `/api/orders/${orderId}/status`,
         { status: newStatus },
         {
           headers: {
@@ -352,7 +355,7 @@ function App() {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://localhost:3000/api/orders",
+        "/api/orders",
         {
           items: cartItems.map((item) => ({
             pizzaId: item.pizzaId,
@@ -391,7 +394,7 @@ function App() {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://localhost:3000/api/payments/start",
+        "/api/payments/start",
         { orderId: createdOrder._id },
         {
           headers: {
@@ -418,7 +421,7 @@ function App() {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://localhost:3000/api/payments/mock/complete",
+        "/api/payments/mock/complete",
         {
           orderId: createdOrder._id,
           paymentId: paymentData.paymentId,
@@ -465,7 +468,7 @@ function App() {
   try {
     if (authMode === "register") {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        "/api/auth/register",
         authForm
       );
 
@@ -484,7 +487,7 @@ function App() {
       });
     } else {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        "/api/auth/login",
         {
           email: authForm.email,
           password: authForm.password,
@@ -563,8 +566,8 @@ const handlePizzaSubmit = async (event) => {
     };
 
     const url = editingPizzaId
-      ? `http://localhost:3000/api/pizzas/${editingPizzaId}`
-      : "http://localhost:3000/api/pizzas";
+      ? `/api/pizzas/${editingPizzaId}`
+      : "/api/pizzas";
 
     await axios({
       method: editingPizzaId ? "put" : "post",
@@ -576,7 +579,7 @@ const handlePizzaSubmit = async (event) => {
     });
 
     const response = await axios.get(
-      "http://localhost:3000/api/pizzas"
+      "/api/pizzas"
     );
 
     const updatedPizzas =
@@ -621,7 +624,7 @@ const handleDeletePizza = async (pizzaId) => {
     const token = localStorage.getItem("token");
 
     await axios.delete(
-      `http://localhost:3000/api/pizzas/${pizzaId}`,
+      `/api/pizzas/${pizzaId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -646,7 +649,7 @@ const fetchInventory = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.get(
-      "http://localhost:3000/api/inventory",
+      "/api/inventory",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -673,7 +676,7 @@ const handleInventorySubmit = async (event) => {
     const token = localStorage.getItem("token");
 
     await axios.post(
-      "http://localhost:3000/api/inventory",
+      "/api/inventory",
       {
         ...inventoryForm,
         quantity: Number(inventoryForm.quantity),
@@ -725,7 +728,7 @@ const handleInventoryQuantity = async (itemId, currentQuantity) => {
     const token = localStorage.getItem("token");
 
     await axios.patch(
-      `http://localhost:3000/api/inventory/${itemId}`,
+      `/api/inventory/${itemId}`,
       { quantity },
       {
         headers: {
