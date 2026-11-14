@@ -22,39 +22,72 @@ app.use(
 
 app.use(express.json());
 
+// MongoDB connection with serverless reuse
+let connectionPromise;
+
+async function connectDB() {
+  if (mongoose.connection.readyState === 1) {
+    return;
+  }
+
+  if (!connectionPromise) {
+    connectionPromise = mongoose
+      .connect(process.env.MONGODB_URI)
+      .catch((error) => {
+        connectionPromise = null;
+        throw error;
+      });
+  }
+
+  await connectionPromise;
+}
+
+// Connect to MongoDB before handling API requests
+app.use(async (req, res, next) => {
+  try {
+    if (!process.env.MONGODB_URI) {
+      throw new Error("MONGODB_URI is missing");
+    }
+
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+    res.status(500).json({ message: "Database connection failed" });
+  }
+});
+
+// Test route
+app.get("/", (req, res) => {
+  res.send("Oasis Pizza API is running!");
+});
+
+// API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/pizzas", pizzaRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/payments", paymentRoutes);
 
-const PORT = process.env.PORT || 3000;
-// Test route
-app.get("/", (req, res) => {
-  res.send("Oasis Pizza API is running!");
-});
+// Local development only
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB, then start the server
-async function startServer() {
-  try {
-    if (!process.env.MONGODB_URI) {
-      throw new Error("MONGODB_URI is missing from .env");
-    }
+  connectDB()
+    .then(() => {
+      console.log("MongoDB connected successfully!");
 
-    await mongoose.connect(process.env.MONGODB_URI);
+      startInventoryAlertJob();
 
-    console.log("MongoDB connected successfully!");
-
-    // Start scheduled inventory alerts
-    startInventoryAlertJob();
-
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
+      app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+      });
+    })
+    .catch((error) => {
+      console.error("Failed to start the server:", error.message);
+      process.exit(1);
     });
-  } catch (error) {
-    console.error("Failed to start the server:", error.message);
-    process.exit(1);
-  }
 }
 
-startServer();
+// Vercel serverless export
+export default app;
