@@ -163,7 +163,22 @@ The application includes an inventory management system that:
 
 ## 📸 Screenshots
 
-Screenshots of the application will be added here.
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Pizza Menu
+![Pizza Menu](screenshots/menu.png)
+
+### Custom Pizza Builder
+![Pizza Builder](screenshots/pizza-builder.png)
+
+![Pizza Builder - Additional View](screenshots/pizza-builder2.png)
+
+### Cart & Checkout
+![Checkout](screenshots/checkout.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/admin-dashboard.png)
 
 ## 👨‍💻 Developer
 
