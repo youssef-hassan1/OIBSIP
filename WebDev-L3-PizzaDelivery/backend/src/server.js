@@ -16,7 +16,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
   })
 );
 
@@ -28,8 +28,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/payments", paymentRoutes);
 
-const PORT = 3000;
-
+const PORT = process.env.PORT || 3000;
 // Test route
 app.get("/", (req, res) => {
   res.send("Oasis Pizza API is running!");
